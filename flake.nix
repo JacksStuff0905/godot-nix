@@ -11,15 +11,16 @@
       nixpkgs,
       flake-utils,
     }:
-    flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        pkgs = nixpkgs.legacyPackages."${system}";
-      in
-      {
-        packages.default = pkgs.writeShellScriptBin "godot-nix" ''
-          echo test;
-        '';
-      }
-    );
+    {
+      homeManagerModules = {
+        default = self.homeManagerModules.godot-nix;
+        godot-nix =
+          { ... }:
+          {
+            imports = [
+              ./flake/homeManager.nix
+            ];
+          };
+      };
+    };
 }
