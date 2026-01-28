@@ -14,8 +14,6 @@ in
       default = { };
     };
 
-    mono = lib.mkEnableOption "mono support";
-
     package = lib.mkOption {
       type = lib.types.package;
       default = pkgs.godot;
@@ -24,8 +22,6 @@ in
   };
 
   config.programs.godot-nix = {
-    package = if (cfg.mono) then (lib.mkDefault pkgs.godot-mono) else cfg.package;
-
     compiledSettings = lib.mkIf cfg.enable (
       # Miscellaneous settings
       let
