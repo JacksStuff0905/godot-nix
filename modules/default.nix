@@ -24,7 +24,7 @@ in
   };
 
   config.programs.godot-nix = {
-    package = lib.mkIf cfg.mono (lib.mkDefault pkgs.godot-mono);
+    package = if (cfg.mono) then (lib.mkDefault pkgs.godot-mono) else cfg.package;
 
     compiledSettings = lib.mkIf cfg.enable (
       # Miscellaneous settings
@@ -32,14 +32,11 @@ in
         flattenTree =
           sep: tree:
           let
-            # Helper function carrying the current key path
             op =
               path: value:
               if lib.isAttrs value then
-                # If it's a set, recurse into children and flatten the resulting lists
                 lib.concatLists (lib.mapAttrsToList (k: v: op (path ++ [ k ]) v) value)
               else
-                # Base case: Return the flattened key and value
                 [
                   {
                     name = builtins.concatStringsSep sep path;
