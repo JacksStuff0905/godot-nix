@@ -8,17 +8,25 @@
 let
   cfg = config.programs.godot-nix;
 
-  toGodotConfig = attrs:
-    lib.concatStringsSep "\n" (lib.mapAttrsToList (key: value:
-      let
-        formattedValue =
-          if builtins.isBool value then (if value then "true" else "false")
-          else if builtins.isInt value then toString value
-          else if builtins.isFloat value then toString value
-          else "\"${toString value}\""; 
-      in
+  toGodotConfig =
+    attrs:
+    lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (
+        key: value:
+        let
+          formattedValue =
+            if builtins.isBool value then
+              (if value then "true" else "false")
+            else if builtins.isInt value then
+              toString value
+            else if builtins.isFloat value then
+              toString value
+            else
+              "\"${toString value}\"";
+        in
         "${key} = ${formattedValue}"
-    ) attrs);
+      ) attrs
+    );
 
   nixGodotSettings = pkgs.writeText "nix-godot-overrides.cfg" (toGodotConfig cfg.compiledSettings);
 
@@ -39,7 +47,7 @@ let
       "$HOME/.config/godot/${configFileName}" \
       "${nixGodotSettings}"
 
-    exec ${lib.getExe config.programs.godot-nix.package} "$@"
+    ${lib.getExe config.programs.godot-nix.package} "$@"
   '';
 in
 {
