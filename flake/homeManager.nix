@@ -22,7 +22,12 @@ let
             else if builtins.isFloat value then
               toString value
             else
-              "\"${toString value}\"";
+              let 
+                escaped = lib.replaceStrings 
+                  [ "\\" "\"" ] 
+                  [ "\\\\" "\\\"" ] 
+                  toString value;
+              in "\"${escaped}\"";
         in
         "${key} = ${formattedValue}"
       ) attrs
