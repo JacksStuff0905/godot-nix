@@ -26,7 +26,7 @@ let
                 escaped = lib.replaceStrings 
                   [ "\\" "\"" ] 
                   [ "\\\\" "\\\"" ] 
-                  toString value;
+                  (toString value);
               in "\"${escaped}\"";
         in
         "${key} = ${formattedValue}"
