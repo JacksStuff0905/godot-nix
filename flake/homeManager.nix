@@ -22,12 +22,10 @@ let
             else if builtins.isFloat value then
               toString value
             else
-              let 
-                escaped = lib.replaceStrings 
-                  [ "\\" "\"" ] 
-                  [ "\\\\" "\\\"" ] 
-                  (toString value);
-              in "\"${escaped}\"";
+              let
+                escaped = lib.replaceStrings [ "\\" "\"" ] [ "\\\\" "\\\"" ] (toString value);
+              in
+              "\"${escaped}\"";
         in
         "${key} = ${formattedValue}"
       ) attrs
@@ -47,10 +45,20 @@ let
 
   godotWrapped = pkgs.writeShellScriptBin "godot" ''
     mkdir -p "${cfg.output-dir}"
+    mkdir -p "${cfg.output-dir}/config"
+    mkdir -p "${cfg.output-dir}/data"
+    mkdir -p "${cfg.output-dir}/cache"
+    mkdir -p "${cfg.output-dir}/state"
 
     ${mergerScript}/bin/godot-config-merger \
-      "${cfg.output-dir}/${configFileName}" \
+      "${cfg.output-dir}/config/${configFileName}" \
       "${nixGodotSettings}"
+
+    # Move the config
+    XDG_CONFIG_HOME="${cfg.output-dir}/config"
+    XDG_DATA_HOME="${cfg.output-dir}/data"
+    XDG_CACHE_HOME="${cfg.output-dir}/cache"
+    XDG_STATE_HOME="${cfg.output-dir}/state"
 
     ${lib.getExe cfg.package} "$@"
   '';
