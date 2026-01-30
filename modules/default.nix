@@ -19,6 +19,11 @@ in
       default = pkgs.godot;
       description = "The package to use for godot-nix.";
     };
+    
+    output-dir = lib.mkOption {
+      type = lib.types.str;
+      default = "$HOME/.config/godot";
+    };
   };
 
   config.programs.godot-nix = {

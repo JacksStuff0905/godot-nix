@@ -8,8 +8,6 @@
   outputs =
     {
       self,
-      nixpkgs,
-      flake-utils,
     }:
     {
       homeManagerModules = {
@@ -18,6 +16,17 @@
           { ... }:
           {
             imports = [
+              ./flake/homeManager.nix
+            ];
+          };
+      };
+      nixosModules = {
+        default = self.nixosModules.godot-nix;
+        godot-nix =
+          { ... }:
+          {
+            imports = [
+              # The config is HM / NixOS agnostic
               ./flake/homeManager.nix
             ];
           };

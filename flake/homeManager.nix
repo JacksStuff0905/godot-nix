@@ -46,13 +46,13 @@ let
   configFileName = "editor_settings-${godotShortVersion}.tres";
 
   godotWrapped = pkgs.writeShellScriptBin "godot" ''
-    mkdir -p "$HOME/.config/godot"
+    mkdir -p "${cfg.output-dir}"
 
     ${mergerScript}/bin/godot-config-merger \
-      "$HOME/.config/godot/${configFileName}" \
+      "${cfg.output-dir}/${configFileName}" \
       "${nixGodotSettings}"
 
-    ${lib.getExe config.programs.godot-nix.package} "$@"
+    ${lib.getExe cfg.package} "$@"
   '';
 in
 {
