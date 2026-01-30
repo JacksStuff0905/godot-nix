@@ -55,10 +55,10 @@ let
       "${nixGodotSettings}"
 
     # Move the config
-    XDG_CONFIG_HOME="${cfg.output-dir}/config"
-    XDG_DATA_HOME="${cfg.output-dir}/data"
-    XDG_CACHE_HOME="${cfg.output-dir}/cache"
-    XDG_STATE_HOME="${cfg.output-dir}/state"
+    export XDG_CONFIG_HOME="${cfg.output-dir}/config"
+    export XDG_DATA_HOME="${cfg.output-dir}/data"
+    export XDG_CACHE_HOME="${cfg.output-dir}/cache"
+    export XDG_STATE_HOME="${cfg.output-dir}/state"
 
     ${lib.getExe cfg.package} "$@"
   '';
