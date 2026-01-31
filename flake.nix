@@ -17,16 +17,20 @@
         pkgs = nixpkgs.legacyPackages."${system}";
       in
       {
-        packages.default =
-          (pkgs.lib.evalModules {
+        packages.default = pkgs.callPackage (
+          { settings ? {} }:
+          ((pkgs.lib.evalModules {
             specialArgs = { inherit pkgs; };
             modules = [
               ./flake/configure.nix
               {
                 config.programs.godot-nix.enable = true;
+                config.programs.godot-nix.settings = settings;
               }
             ];
-          }).config.programs.godot-nix.compiledPackage;
+          }).config.programs.godot-nix.compiledPackage
+          )
+        ) { };
       }
     )
     // {
