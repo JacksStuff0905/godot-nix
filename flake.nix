@@ -8,28 +8,55 @@
   outputs =
     {
       self,
-      nixpkgs
+      nixpkgs,
+      flake-utils,
     }:
-    {
+    flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = nixpkgs.legacyPackages."${system}";
+      in
+      {
+        packages.default =
+          (pkgs.lib.evalModules {
+            specialArgs = { inherit pkgs; };
+            modules = [
+              ./flake/configure.nix
+              {
+                config.programs.godot-nix.enable = true;
+              }
+            ];
+          }).config.programs.godot-nix.compiledPackage;
+      }
+    )
+    // {
       homeManagerModules = {
         default = self.homeManagerModules.godot-nix;
         godot-nix =
-          { ... }:
+          { config, lib, ... }:
           {
             imports = [
-              ./flake/homeManager.nix
+              ./flake/configure.nix
             ];
+
+            config = lib.mkIf config.programs.godot-nix.enable {
+              home.packages = [ config.programs.godot-nix.compiledPackage ];
+            };
           };
       };
       nixosModules = {
         default = self.nixosModules.godot-nix;
         godot-nix =
-          { ... }:
+          { config, lib, ... }:
           {
             imports = [
               # The config is HM / NixOS agnostic
-              ./flake/homeManager.nix
+              ./flake/configure.nix
             ];
+
+            config = lib.mkIf config.programs.godot-nix.enable {
+              environment.systemPackages = [ config.programs.godot-nix.compiledPackage ];
+            };
           };
       };
     };

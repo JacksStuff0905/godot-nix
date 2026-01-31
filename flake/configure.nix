@@ -44,20 +44,20 @@ let
   configFileName = "editor_settings-${godotShortVersion}.tres";
 
   godotWrapped = pkgs.writeShellScriptBin "godot" ''
-    mkdir -p "${cfg.output-dir}/godot/"
-    mkdir -p "${cfg.output-dir}/data"
-    mkdir -p "${cfg.output-dir}/cache"
-    mkdir -p "${cfg.output-dir}/state"
+    mkdir -p "${cfg.outputDir}/godot/"
+    mkdir -p "${cfg.outputDir}/data"
+    mkdir -p "${cfg.outputDir}/cache"
+    mkdir -p "${cfg.outputDir}/state"
 
     ${mergerScript}/bin/godot-config-merger \
-      "${cfg.output-dir}/godot/${configFileName}" \
+      "${cfg.outputDir}/godot/${configFileName}" \
       "${nixGodotSettings}"
 
     # Move the config
-    export XDG_CONFIG_HOME="${cfg.output-dir}"
-    export XDG_DATA_HOME="${cfg.output-dir}/data"
-    export XDG_CACHE_HOME="${cfg.output-dir}/cache"
-    export XDG_STATE_HOME="${cfg.output-dir}/state"
+    export XDG_CONFIG_HOME="${cfg.outputDir}"
+    export XDG_DATA_HOME="${cfg.outputDir}/data"
+    export XDG_CACHE_HOME="${cfg.outputDir}/cache"
+    export XDG_STATE_HOME="${cfg.outputDir}/state"
 
     ${lib.getExe cfg.package} "$@"
   '';
@@ -78,6 +78,5 @@ in
 
   config = lib.mkIf cfg.enable {
     programs.godot-nix.compiledPackage = godotWrapped;
-    home.packages = [ godotWrapped ];
   };
 }
