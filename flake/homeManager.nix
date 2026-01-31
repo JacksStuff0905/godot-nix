@@ -77,6 +77,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    programs.godot-nix.compiledPackage = godotWrapped;
     home.packages = [ godotWrapped ];
   };
 }
