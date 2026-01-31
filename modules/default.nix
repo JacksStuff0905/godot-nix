@@ -20,7 +20,7 @@ in
       description = "The package to use for godot-nix.";
     };
 
-    output-dir = lib.mkOption {
+    outputDir = lib.mkOption {
       type = lib.types.str;
       default = "$HOME/.config";
     };
