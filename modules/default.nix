@@ -22,7 +22,7 @@ in
     
     output-dir = lib.mkOption {
       type = lib.types.str;
-      default = "$HOME/.config/godot";
+      default = "$HOME/.config";
     };
   };
 

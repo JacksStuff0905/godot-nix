@@ -44,8 +44,7 @@ let
   configFileName = "editor_settings-${godotShortVersion}.tres";
 
   godotWrapped = pkgs.writeShellScriptBin "godot" ''
-    mkdir -p "${cfg.output-dir}"
-    mkdir -p "${cfg.output-dir}/config"
+    mkdir -p "${cfg.output-dir}/godot/"
     mkdir -p "${cfg.output-dir}/data"
     mkdir -p "${cfg.output-dir}/cache"
     mkdir -p "${cfg.output-dir}/state"
@@ -55,7 +54,7 @@ let
       "${nixGodotSettings}"
 
     # Move the config
-    export XDG_CONFIG_HOME="${cfg.output-dir}/config"
+    export XDG_CONFIG_HOME="${cfg.output-dir}"
     export XDG_DATA_HOME="${cfg.output-dir}/data"
     export XDG_CACHE_HOME="${cfg.output-dir}/cache"
     export XDG_STATE_HOME="${cfg.output-dir}/state"
@@ -75,7 +74,6 @@ in
       type = lib.types.attrs;
       default = { };
     };
-
   };
 
   config = lib.mkIf cfg.enable {
