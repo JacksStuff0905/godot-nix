@@ -50,7 +50,7 @@ let
     mkdir -p "${cfg.output-dir}/state"
 
     ${mergerScript}/bin/godot-config-merger \
-      "${cfg.output-dir}/config/${configFileName}" \
+      "${cfg.output-dir}/godot/${configFileName}" \
       "${nixGodotSettings}"
 
     # Move the config
