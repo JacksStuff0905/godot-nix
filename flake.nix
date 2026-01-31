@@ -18,7 +18,10 @@
       in
       {
         packages.default = pkgs.callPackage (
-          { settings ? {} }:
+          {
+            settings ? { },
+            outputDir ? "$HOME/.config/",
+          }:
           ((pkgs.lib.evalModules {
             specialArgs = { inherit pkgs; };
             modules = [
@@ -26,6 +29,7 @@
               {
                 config.programs.godot-nix.enable = true;
                 config.programs.godot-nix.settings = settings;
+                config.programs.godot-nix.outputDir = outputDir;
               }
             ];
           }).config.programs.godot-nix.compiledPackage
