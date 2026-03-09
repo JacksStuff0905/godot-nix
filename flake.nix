@@ -20,6 +20,7 @@
         packages.default = pkgs.callPackage (
           {
             settings ? { },
+            package ? pkgs.godot,
             outputDir ? "$HOME/.config/",
           }:
           ((pkgs.lib.evalModules {
@@ -28,6 +29,7 @@
               ./flake/configure.nix
               {
                 config.programs.godot-nix.enable = true;
+                config.programs.godot-nix.package = package;
                 config.programs.godot-nix.settings = settings;
                 config.programs.godot-nix.outputDir = outputDir;
               }
